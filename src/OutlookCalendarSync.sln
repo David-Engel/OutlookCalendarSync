@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2024
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutlookCalendarSync", "OutlookCalendarSync\OutlookCalendarSync.csproj", "{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AnyCPU = Debug|AnyCPU
+		Release|AnyCPU = Release|AnyCPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}.Debug|AnyCPU.ActiveCfg = Debug|Any CPU
+		{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}.Debug|AnyCPU.Build.0 = Debug|Any CPU
+		{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}.Release|AnyCPU.ActiveCfg = Release|Any CPU
+		{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}.Release|AnyCPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6DFCC057-F84C-4D79-BFE5-F55915A8150D}
+	EndGlobalSection
+EndGlobal
