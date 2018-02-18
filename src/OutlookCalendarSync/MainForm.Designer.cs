@@ -386,8 +386,8 @@ namespace OutlookCalendarSync
             this.labelAbout.Name = "labelAbout";
             this.labelAbout.Size = new System.Drawing.Size(722, 191);
             this.labelAbout.TabIndex = 1;
-            this.labelAbout.Text = "OutlookCalendarSync\r\n\r\nVersion {version}\r\n\r\n2018 by David Engel\r\n\r\nCredit:\r\nOrigi" +
-    "nally OutlookGoogleSync by Zissis Siantidis";
+            this.labelAbout.Text = "David\'s Outlook Calendar Sync\r\n\r\nVersion {version}\r\n\r\n2018 by David Engel\r\n\r\nCred" +
+    "it:\r\nOriginally OutlookGoogleSync by Zissis Siantidis";
             this.labelAbout.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // notifyIcon1
@@ -406,7 +406,7 @@ namespace OutlookCalendarSync
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
-            this.Text = "OutlookCalendarSync";
+            this.Text = "David\'s Outlook Calendar Sync";
             this.Resize += new System.EventHandler(this.MainFormResize);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
