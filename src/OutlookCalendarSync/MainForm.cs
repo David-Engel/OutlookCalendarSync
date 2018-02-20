@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using Microsoft.Office.Interop.Outlook;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Net;
 using System.Windows.Forms;
-using Microsoft.Office.Interop.Outlook;
-using System.Runtime.InteropServices;
 
 namespace OutlookCalendarSync
 {
@@ -25,7 +22,7 @@ namespace OutlookCalendarSync
         public DateTime oldtime;
         public List<int> MinuteOffsets = new List<int>();
 
-        private Dictionary<AppointmentItem, string> _outlookAppointmentSignatures = new Dictionary<AppointmentItem, string>();
+        private AppointmentItemCache _aiCache = new AppointmentItemCache();
 
         public MainForm()
         {
@@ -127,7 +124,7 @@ namespace OutlookCalendarSync
 
         void SyncNow_Click(object sender, EventArgs e)
         {
-            _outlookAppointmentSignatures.Clear();
+            _aiCache.Clear();
 
             bSyncNow.Enabled = false;
             buttonDeleteAllSyncItems.Enabled = false;
@@ -164,7 +161,11 @@ namespace OutlookCalendarSync
                 foreach (OutlookCalendar calendarFrom in calendarsToSync)
                 {
                     logboxout("Reading Outlook Calendar entries from " + calendarFrom.Name + " as Source...");
-                    List<AppointmentItem> fromOutlookEntries = calendarFrom.getAppointmentItemsInRange();
+                    List<AppointmentItemCacheEntry> fromOutlookEntries = new List<AppointmentItemCacheEntry>();
+                    foreach (AppointmentItem a in calendarFrom.getAppointmentItemsInRange())
+                    {
+                        fromOutlookEntries.Add(_aiCache.getAppointmentItemCacheEntry(a, calendarFrom.Name));
+                    }
 
                     logboxout("Found " + fromOutlookEntries.Count + " calendar Entries.");
                     logboxout("--------------------------------------------------");
@@ -173,14 +174,19 @@ namespace OutlookCalendarSync
                     {
 
                         logboxout("Syncing calendar from " + calendarFrom.Name + " to " + calendarTo.Name + " as Destination");
-                        List<AppointmentItem> toOutlookEntries = calendarTo.getAppointmentItemsInRange();
+                        List<AppointmentItemCacheEntry> toOutlookEntries = new List<AppointmentItemCacheEntry>();
+                        foreach (AppointmentItem a in calendarTo.getAppointmentItemsInRange())
+                        {
+                            toOutlookEntries.Add(_aiCache.getAppointmentItemCacheEntry(a, calendarTo.Name));
+                        }
+
                         logboxout("Found " + fromOutlookEntries.Count + " Destination calendar Entries.");
                         logboxout("--------------------------------------------------");
 
                         List<AppointmentItem> itemsToDelete = IdentifyEntriesToBeDeleted(fromOutlookEntries, toOutlookEntries, calendarFrom.Name);
                         logboxout("Found " + itemsToDelete.Count + " sync items to delete in Destination calendar.");
 
-                        List<AppointmentItem> itemsToCreate = IdentifyEntriesToBeCreated(fromOutlookEntries, toOutlookEntries, calendarFrom.Name);
+                        List<AppointmentItem> itemsToCreate = IdentifyEntriesToBeCreated(fromOutlookEntries, toOutlookEntries);
                         logboxout("Found " + itemsToCreate.Count + " items to create in Destination calendar.");
 
                         if (itemsToDelete.Count > 0)
@@ -254,15 +260,15 @@ namespace OutlookCalendarSync
             bSyncNow.Enabled = true;
         }
 
-        public List<AppointmentItem> IdentifyEntriesToBeDeleted(List<AppointmentItem> fromItems, List<AppointmentItem> toItems, string fromAccountName)
+        public List<AppointmentItem> IdentifyEntriesToBeDeleted(List<AppointmentItemCacheEntry> fromItems, List<AppointmentItemCacheEntry> toItems, string fromAccountName)
         {
             List<AppointmentItem> result = new List<AppointmentItem>();
-            foreach (AppointmentItem toItem in toItems.Where(i => isSyncItemForAccount(i, fromAccountName)))
+            foreach (AppointmentItemCacheEntry toItem in toItems.Where(i => isSyncItemForAccount(i, fromAccountName)))
             {
                 bool found = false;
-                foreach (AppointmentItem fromItem in fromItems.Where(i => !isSyncItem(i)))
+                foreach (AppointmentItemCacheEntry fromItem in fromItems.Where(i => !i.IsSyncItem))
                 {
-                    if (signature(fromItem) == signature(toItem))
+                    if (fromItem.Signature.Equals(toItem.Signature))
                     {
                         found = true;
                         break;
@@ -271,22 +277,22 @@ namespace OutlookCalendarSync
 
                 if (!found)
                 {
-                    result.Add(toItem);
+                    result.Add(toItem.AppointmentItem);
                 }
             }
 
             return result;
         }
 
-        public List<AppointmentItem> IdentifyEntriesToBeCreated(List<AppointmentItem> fromItems, List<AppointmentItem> toItems, string fromAccountName)
+        public List<AppointmentItem> IdentifyEntriesToBeCreated(List<AppointmentItemCacheEntry> fromItems, List<AppointmentItemCacheEntry> toItems)
         {
             List<AppointmentItem> result = new List<AppointmentItem>();
-            foreach (AppointmentItem fromItem in fromItems.Where(i => !isSyncItem(i)))
+            foreach (AppointmentItemCacheEntry fromItem in fromItems.Where(i => !i.IsSyncItem))
             {
                 bool found = false;
-                foreach (AppointmentItem toItem in toItems.Where(i => isSyncItemForAccount(i, fromAccountName)))
+                foreach (AppointmentItemCacheEntry toItem in toItems.Where(i => isSyncItemForAccount(i, fromItem.FromAccount)))
                 {
-                    if (signature(fromItem) == signature(toItem))
+                    if (fromItem.Signature.Equals(toItem.Signature))
                     {
                         found = true;
                         break;
@@ -295,55 +301,16 @@ namespace OutlookCalendarSync
 
                 if (!found)
                 {
-                    result.Add(fromItem);
+                    result.Add(fromItem.AppointmentItem);
                 }
             }
 
             return result;
         }
 
-        //creates a standardized summary string with the key attributes of a calendar entry for comparison
-        public string signature(AppointmentItem ai)
+        public bool isSyncItemForAccount(AppointmentItemCacheEntry ai, string accountName)
         {
-            if (!_outlookAppointmentSignatures.ContainsKey(ai))
-            {
-                if (isSyncItem(ai))
-                {
-                    _outlookAppointmentSignatures.Add(ai, (ai.Start + ";" + ai.End + ";" + ai.Subject.Substring(SUBJECT_PREFIX.Length) + ";" + ai.Location).Trim());
-                }
-                else
-                {
-                    _outlookAppointmentSignatures.Add(ai, (ai.Start + ";" + ai.End + ";" + ai.Subject + ";" + ai.Location).Trim());
-                }
-            }
-
-            return _outlookAppointmentSignatures[ai];
-        }
-
-        public bool isSyncItem(AppointmentItem ai)
-        {
-            if (ai.UserProperties != null)
-            {
-                var flag = ai.UserProperties.Find(USER_PROPERTY_NAME);
-                return (flag != null);
-            }
-
-            return false;
-        }
-
-        public bool isSyncItemForAccount(AppointmentItem ai, string accountName)
-        {
-            if (ai.UserProperties != null)
-            {
-                var flag = ai.UserProperties.Find(USER_PROPERTY_NAME, OlUserPropertyType.olText);
-                if (flag != null &&
-                    flag.Value as string == accountName)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return (ai.IsSyncItem && accountName.Equals(ai.FromAccount));
         }
 
         void logboxout(string s)
@@ -473,7 +440,7 @@ namespace OutlookCalendarSync
                     }
 
                     List<AppointmentItem> entries = calendar.getAppointmentItemsInRange();
-                    foreach (AppointmentItem item in entries.Where(i => isSyncItem(i)))
+                    foreach (AppointmentItem item in entries.Where(i => _aiCache.getAppointmentItemCacheEntry(i, calendar.Name).IsSyncItem))
                     {
                         itemsToDelete.Add(item);
                     }
