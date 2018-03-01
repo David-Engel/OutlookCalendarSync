@@ -5,8 +5,11 @@ A simple utility to create synced calendar items between multiple Outlook calend
 This was forked from my Outlook Google Calendar Sync utility for which the original source came from a codeplex project by Zissis Siantidis many years ago and I have modified and extended it to suit my needs.
 
 # Instructions
-There is no installer currently. Right now you have to build the source yourself using Visual Studio 2017. You can simply copy the resulting EXE and DLLs to any folder and run the EXE.
 
+## Install
+Download the [latest release](https://github.com/David-Engel/OutlookCalendarSync/releases/latest) and install it.
+
+## Configure Settings
 Settings are hopefully mostly self-explanatory:
 ![Settings](img/Settings.png)
 
@@ -23,3 +26,8 @@ For each calendar checked, all appointment items will be read within the date ra
 **Save**
 
 Settings changes take effect immediately in the current session. To preserve Settings the next time the application is run, use the Save button to write settings to Settings.xml in the same folder as the EXE. Those settings will be loaded the next time the application is run.
+
+## Sync
+Switch to the Sync tab and push the Sync button
+
+The Delete All Sync Items button will clean up any Appointment Items created by the application in all selected calendars (Settings) within the specified Sync Date Range (Settings).
