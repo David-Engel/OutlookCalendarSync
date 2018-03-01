@@ -7,7 +7,7 @@ This was forked from my Outlook Google Calendar Sync utility for which the origi
 # Instructions
 
 ## Install
-Download the [latest release](https://github.com/David-Engel/OutlookCalendarSync/releases/latest) and install it.
+Download the [latest release](https://github.com/David-Engel/OutlookCalendarSync/releases/latest) and run the installer. It will create a Start Menu shortcut and one in your personal Startup folder so it will start on login. It requires Outlook to be installed locally (only tested against Outlook 2016).
 
 ## Configure Settings
 Settings are hopefully mostly self-explanatory:
