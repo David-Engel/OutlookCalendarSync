@@ -3,3 +3,5 @@ obj
 *.suo
 .vs
 /src/OutlookCalendarSync/*.user
+/src/OutlookCalendarSyncSetup/Debug
+/src/OutlookCalendarSyncSetup/Release

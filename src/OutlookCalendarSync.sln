@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutlookCalendarSync", "OutlookCalendarSync\OutlookCalendarSync.csproj", "{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OutlookCalendarSyncSetup", "OutlookCalendarSyncSetup\OutlookCalendarSyncSetup.vdproj", "{73A1A35B-65C7-4847-B8F9-9C8FCA2B4664}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}.Debug|AnyCPU.Build.0 = Debug|Any CPU
 		{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}.Release|AnyCPU.ActiveCfg = Release|Any CPU
 		{B35C9DB2-79BC-46A3-9BE4-BCE33BC3721E}.Release|AnyCPU.Build.0 = Release|Any CPU
+		{73A1A35B-65C7-4847-B8F9-9C8FCA2B4664}.Debug|AnyCPU.ActiveCfg = Debug
+		{73A1A35B-65C7-4847-B8F9-9C8FCA2B4664}.Release|AnyCPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
