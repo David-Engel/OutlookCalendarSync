@@ -3,7 +3,6 @@ using System.Collections.Generic;
 //using Outlook = Microsoft.Office.Interop.Outlook;
 using Microsoft.Office.Interop.Outlook;
 
-
 namespace OutlookCalendarSync
 {
     /// <summary>
@@ -25,16 +24,13 @@ namespace OutlookCalendarSync
         {
             get { return _accountName; }
         }
-        
-        
+
         public OutlookHelper()
         {
-        
             // Create the Outlook application.
             Application oApp = new Application();
 
             // Get the NameSpace and Logon information.
-            // Outlook.NameSpace oNS = (Outlook.NameSpace)oApp.GetNamespace("mapi");
             NameSpace oNS = oApp.GetNamespace("mapi");
 
             //Log on by using a dialog box to choose the profile.

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Office.Interop.Outlook;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace OutlookCalendarSync
 {
@@ -23,6 +24,11 @@ namespace OutlookCalendarSync
 
         public void Clear()
         {
+            foreach (AppointmentItem ai in _cache.Keys)
+            {
+                Marshal.ReleaseComObject(ai);
+            }
+
             _cache.Clear();
         }
     }

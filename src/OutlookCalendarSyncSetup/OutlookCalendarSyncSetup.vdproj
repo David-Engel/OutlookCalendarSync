@@ -16,12 +16,6 @@
         "Entry"
         {
         "MsmKey" = "8:_070E80A993F5166AA820822D9F1C5A9A"
-        "OwnerKey" = "8:_EA6C79E4F0B4D23F8F241FE30DFC72B2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_070E80A993F5166AA820822D9F1C5A9A"
         "OwnerKey" = "8:_19BA7D09204AE65366DDCE20C04DC332"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -29,6 +23,12 @@
         {
         "MsmKey" = "8:_070E80A993F5166AA820822D9F1C5A9A"
         "OwnerKey" = "8:_5BF1DA9291F34D768E20478B44A22A68"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_070E80A993F5166AA820822D9F1C5A9A"
+        "OwnerKey" = "8:_EA6C79E4F0B4D23F8F241FE30DFC72B2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,12 +88,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_19BA7D09204AE65366DDCE20C04DC332"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5BF1DA9291F34D768E20478B44A22A68"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -112,12 +106,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_070E80A993F5166AA820822D9F1C5A9A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_FCBFDB8B46D1AE55A4D0A41B7548AEE0"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -125,6 +113,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_31D79BF4A6EA2BB7D113C46919C3E83C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_19BA7D09204AE65366DDCE20C04DC332"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_070E80A993F5166AA820822D9F1C5A9A"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -145,6 +145,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -161,6 +169,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -443,15 +459,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Outlook Calendar Sync"
-        "ProductCode" = "8:{756D1B61-E011-4C61-99EB-804F08B90FF2}"
-        "PackageCode" = "8:{EF4ACD99-E8DE-4E67-A2EE-E62F84299121}"
+        "ProductCode" = "8:{F2A4DC47-DCD8-4666-89E1-BBDC0F59CF6D}"
+        "PackageCode" = "8:{4F5DD604-0B11-44D3-9F35-C2A075D2BF26}"
         "UpgradeCode" = "8:{4927D73B-7315-4B15-A997-AFE41FD4CE68}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:David Engel"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/David-Engel/OutlookCalendarSync"

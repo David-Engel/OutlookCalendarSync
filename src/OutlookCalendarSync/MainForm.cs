@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace OutlookCalendarSync
@@ -124,8 +125,6 @@ namespace OutlookCalendarSync
 
         void SyncNow_Click(object sender, EventArgs e)
         {
-            _aiCache.Clear();
-
             bSyncNow.Enabled = false;
             buttonDeleteAllSyncItems.Enabled = false;
 
@@ -133,13 +132,15 @@ namespace OutlookCalendarSync
 
             DateTime SyncStarted = DateTime.Now;
 
+            OutlookHelper oh = null;
+
             try
             {
                 logboxout("Sync started at " + SyncStarted.ToString());
                 logboxout("--------------------------------------------------");
 
 
-                OutlookHelper oh = new OutlookHelper();
+                oh = new OutlookHelper();
                 List<OutlookCalendar> calendarsToSync = new List<OutlookCalendar>();
                 foreach (OutlookCalendar calendar in oh.CalendarFolders)
                 {
@@ -254,6 +255,28 @@ namespace OutlookCalendarSync
             catch (System.Exception ex)
             {
                 logboxout("Error Syncing:\r\n" + ex.ToString());
+            }
+
+            try
+            {
+                _aiCache.Clear();
+                if (oh != null && oh.CalendarFolders != null)
+                {
+                    foreach (OutlookCalendar oc in oh.CalendarFolders)
+                    {
+                        if (oc != null && oc.Folder != null)
+                        {
+                            Marshal.ReleaseComObject(oc.Folder);
+                        }
+                    }
+                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            catch (System.Exception ex)
+            {
+                logboxout("Warning: Error freeing COM resources:\r\n" + ex.ToString());
             }
 
             buttonDeleteAllSyncItems.Enabled = true;
