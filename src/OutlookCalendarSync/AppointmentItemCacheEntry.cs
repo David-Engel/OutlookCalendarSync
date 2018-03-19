@@ -25,11 +25,16 @@ namespace OutlookCalendarSync
 
             if (_isSyncItem)
             {
-                _signature = (_appointmentItem.Start + ";" + _appointmentItem.End + ";" + _appointmentItem.Subject.Substring(MainForm.SUBJECT_PREFIX.Length) + ";" + _appointmentItem.Location).Trim();
+                _signature = (_appointmentItem.Start + ";" + _appointmentItem.End + ";" +
+                    _appointmentItem.Subject.Substring(MainForm.SUBJECT_PREFIX.Length) + ";" +
+                    _appointmentItem.Location).Trim() + ";" + _appointmentItem.BusyStatus + ";" +
+                    _appointmentItem.Sensitivity;
             }
             else
             {
-                _signature = (_appointmentItem.Start + ";" + _appointmentItem.End + ";" + _appointmentItem.Subject + ";" + _appointmentItem.Location).Trim();
+                _signature = (_appointmentItem.Start + ";" + _appointmentItem.End + ";" +
+                    _appointmentItem.Subject + ";" + _appointmentItem.Location).Trim() +
+                    ";" + _appointmentItem.BusyStatus + ";" + _appointmentItem.Sensitivity;
             }
         }
 
