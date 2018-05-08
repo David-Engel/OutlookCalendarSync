@@ -12,7 +12,7 @@ namespace OutlookCalendarSync
         {
         }
 
-        public AppointmentItemCacheEntry getAppointmentItemCacheEntry(AppointmentItem appointmentItem, string fromAccount)
+        public AppointmentItemCacheEntry GetAppointmentItemCacheEntry(AppointmentItem appointmentItem, string fromAccount)
         {
             if (!_cache.ContainsKey(appointmentItem))
             {

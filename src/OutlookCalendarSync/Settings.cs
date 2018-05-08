@@ -10,18 +10,18 @@ namespace OutlookCalendarSync
     /// </summary>
     public class Settings
     {
-        private static Settings instance;
+        private static Settings _instance;
 
         public static Settings Instance
         {
             get 
             {
-                if (instance == null) instance = new Settings();
-                return instance;
+                if (_instance == null) _instance = new Settings();
+                return _instance;
             }
             set
             {
-                instance = value;
+                _instance = value;
             }
           
         }
@@ -43,7 +43,6 @@ namespace OutlookCalendarSync
 
         public Settings()
         {
-
         }
     }
 }

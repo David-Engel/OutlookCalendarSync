@@ -21,7 +21,7 @@ Check (double-click) all the calendars you want to sync (at least two).
 
 **Sync Date Range**
 
-Set the range of days you want to gather appointments in each calendar to sync. If you want it to sync hourly, check the box and set the desired minute of each hour you want it to run.
+Set the range of days you want to gather appointments in each calendar to sync. If you want it to sync regularly, check the box and set the desired minute(s) of each hour you want it to run. Multiple minutes can be defined by using a comma separator.
 
 **Save**
 

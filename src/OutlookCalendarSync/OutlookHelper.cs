@@ -11,13 +11,13 @@ namespace OutlookCalendarSync
     public class OutlookHelper
     {
         //private static OutlookHelper instance;
-        private List<OutlookCalendar> calendarFolders = new List<OutlookCalendar>();
+        private List<OutlookCalendar> _calendarFolders = new List<OutlookCalendar>();
 
         private string _accountName = string.Empty;
 
         public List<OutlookCalendar> CalendarFolders
         {
-            get { return calendarFolders; }
+            get { return _calendarFolders; }
         }
 
         public string AccountName

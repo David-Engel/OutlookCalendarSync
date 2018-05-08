@@ -38,7 +38,7 @@ namespace OutlookCalendarSync
             return _name;
         }
 
-        public List<AppointmentItem> getAppointmentItemsInRange()
+        public List<AppointmentItem> GetAppointmentItemsInRange()
         {
             if (_appointments != null)
             {
