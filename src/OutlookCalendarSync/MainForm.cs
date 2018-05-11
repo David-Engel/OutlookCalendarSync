@@ -165,7 +165,7 @@ namespace OutlookCalendarSync
 
                 foreach (OutlookCalendar calendarFrom in calendarsToSync)
                 {
-                    logboxout("Reading Outlook Calendar entries from " + calendarFrom.Name + " as Source...");
+                    logboxout("Reading Outlook Calendar entries from Source:\r\n " + calendarFrom.Name);
                     List<AppointmentItemCacheEntry> fromOutlookEntries = new List<AppointmentItemCacheEntry>();
                     foreach (AppointmentItem a in calendarFrom.GetAppointmentItemsInRange())
                     {
@@ -173,12 +173,11 @@ namespace OutlookCalendarSync
                     }
 
                     logboxout("Found " + fromOutlookEntries.Count + " calendar Entries.");
-                    logboxout("--------------------------------------------------");
 
                     foreach (OutlookCalendar calendarTo in calendarsToSync.Where(c => !c.Name.Equals(calendarFrom.Name)))
                     {
 
-                        logboxout("Syncing calendar from " + calendarFrom.Name + " to " + calendarTo.Name + " as Destination");
+                        logboxout("Syncing calendar from Source to Destination:\r\n " + calendarTo.Name);
                         List<AppointmentItemCacheEntry> toOutlookEntries = new List<AppointmentItemCacheEntry>();
                         foreach (AppointmentItem a in calendarTo.GetAppointmentItemsInRange())
                         {
@@ -186,7 +185,6 @@ namespace OutlookCalendarSync
                         }
 
                         logboxout("Found " + fromOutlookEntries.Count + " Destination calendar Entries.");
-                        logboxout("--------------------------------------------------");
 
                         List<AppointmentItem> itemsToDelete = identifyEntriesToBeDeleted(fromOutlookEntries, toOutlookEntries, calendarFrom.Name);
                         logboxout("Found " + itemsToDelete.Count + " sync items to delete in Destination calendar.");
@@ -201,8 +199,6 @@ namespace OutlookCalendarSync
                             {
                                 ai.Delete();
                             }
-                            logboxout("Done.");
-                            logboxout("--------------------------------------------------");
                         }
 
                         if (itemsToCreate.Count > 0)
@@ -244,9 +240,9 @@ namespace OutlookCalendarSync
 
                                 newAi.Save();
                             }
-                            logboxout("Done.");
-                            logboxout("--------------------------------------------------");
                         }
+                        logboxout("Done.");
+                        logboxout("--------------------------------------------------");
                     }
                 }
 
