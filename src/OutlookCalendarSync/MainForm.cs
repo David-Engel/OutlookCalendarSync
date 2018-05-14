@@ -21,6 +21,7 @@ namespace OutlookCalendarSync
         private Timer _ogstimer;
         private DateTime _oldtime;
         private List<int> _minuteOffsets = new List<int>();
+        private FormWindowState _previousWindowState = FormWindowState.Normal;
 
         private AppointmentItemCache _aiCache = new AppointmentItemCache();
         private BackgroundWorker _syncWorker = new BackgroundWorker();
@@ -68,9 +69,11 @@ namespace OutlookCalendarSync
             //Start in tray?
             if (checkBoxStartInTray.Checked)
             {
-                this.WindowState = FormWindowState.Minimized;
-                notifyIcon1.Visible = true;
-                this.Hide();
+                WindowState = FormWindowState.Minimized;
+            }
+            else
+            {
+                ShowInTaskbar = true;
             }
 
             //set up timer (every 30s) for checking the minute offsets
@@ -427,8 +430,8 @@ namespace OutlookCalendarSync
 
         void notifyIcon1_Click(object sender, EventArgs e)
         {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
+            Show();
+            WindowState = _previousWindowState;
         }
 
         void MainForm_Resized(object sender, EventArgs e)
@@ -438,14 +441,17 @@ namespace OutlookCalendarSync
                 return;
             }
 
-            if (this.WindowState == FormWindowState.Minimized)
+            if (WindowState == FormWindowState.Minimized)
             {
                 notifyIcon1.Visible = true;
-                this.Hide();
+                ShowInTaskbar = false;
+                Hide();
             }
-            else if (this.WindowState == FormWindowState.Normal)
+            else
             {
+                _previousWindowState = WindowState;
                 notifyIcon1.Visible = false;
+                ShowInTaskbar = true;
             }
         }
 
