@@ -137,13 +137,13 @@ namespace OutlookCalendarSync
                 return;
             }
 
-            DateTime SyncStarted = DateTime.Now;
+            DateTime syncStarted = DateTime.Now;
 
             OutlookHelper oh = null;
 
             try
             {
-                logboxout("Sync started at " + SyncStarted.ToString());
+                logboxout("Sync started at " + syncStarted.ToString());
                 logboxout("--------------------------------------------------");
 
 
@@ -170,7 +170,7 @@ namespace OutlookCalendarSync
                 {
                     logboxout("Reading Outlook Calendar entries from Source:\r\n " + calendarFrom.Name);
                     List<AppointmentItemCacheEntry> fromOutlookEntries = new List<AppointmentItemCacheEntry>();
-                    foreach (AppointmentItem a in calendarFrom.GetAppointmentItemsInRange())
+                    foreach (AppointmentItem a in calendarFrom.GetAppointmentItemsInRange(syncStarted))
                     {
                         fromOutlookEntries.Add(_aiCache.GetAppointmentItemCacheEntry(a, calendarFrom.Name));
                     }
@@ -182,7 +182,7 @@ namespace OutlookCalendarSync
 
                         logboxout("Syncing calendar from Source to Destination:\r\n " + calendarTo.Name);
                         List<AppointmentItemCacheEntry> toOutlookEntries = new List<AppointmentItemCacheEntry>();
-                        foreach (AppointmentItem a in calendarTo.GetAppointmentItemsInRange())
+                        foreach (AppointmentItem a in calendarTo.GetAppointmentItemsInRange(syncStarted))
                         {
                             toOutlookEntries.Add(_aiCache.GetAppointmentItemCacheEntry(a, calendarTo.Name));
                         }
@@ -250,7 +250,7 @@ namespace OutlookCalendarSync
                 }
 
                 DateTime SyncFinished = DateTime.Now;
-                TimeSpan Elapsed = SyncFinished - SyncStarted;
+                TimeSpan Elapsed = SyncFinished - syncStarted;
                 logboxout("Sync finished at " + SyncFinished.ToString());
                 logboxout("Time needed: " + Elapsed.Minutes + " min " + Elapsed.Seconds + " s");
             }
@@ -476,13 +476,13 @@ namespace OutlookCalendarSync
 
         private void deleteAllSyncItems()
         {
-            DateTime SyncStarted = DateTime.Now;
+            DateTime syncStarted = DateTime.Now;
 
             OutlookHelper oh = null;
 
             try
             {
-                logboxout("Delete started at " + SyncStarted.ToString());
+                logboxout("Delete started at " + syncStarted.ToString());
                 logboxout("--------------------------------------------------");
 
                 oh = new OutlookHelper();
@@ -496,7 +496,7 @@ namespace OutlookCalendarSync
                         continue;
                     }
 
-                    List<AppointmentItem> entries = calendar.GetAppointmentItemsInRange();
+                    List<AppointmentItem> entries = calendar.GetAppointmentItemsInRange(syncStarted);
                     foreach (AppointmentItem item in entries.Where(i => _aiCache.GetAppointmentItemCacheEntry(i, calendar.Name).IsSyncItem))
                     {
                         itemsToDelete.Add(item);
@@ -519,7 +519,7 @@ namespace OutlookCalendarSync
                 logboxout("--------------------------------------------------");
 
                 DateTime SyncFinished = DateTime.Now;
-                TimeSpan Elapsed = SyncFinished - SyncStarted;
+                TimeSpan Elapsed = SyncFinished - syncStarted;
                 logboxout("Delete finished at " + SyncFinished.ToString());
                 logboxout("Time needed: " + Elapsed.Minutes + " min " + Elapsed.Seconds + " s");
             }

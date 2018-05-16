@@ -38,7 +38,7 @@ namespace OutlookCalendarSync
             return _name;
         }
 
-        public List<AppointmentItem> GetAppointmentItemsInRange()
+        public List<AppointmentItem> GetAppointmentItemsInRange(DateTime syncDateTime)
         {
             if (_appointments != null)
             {
@@ -58,8 +58,8 @@ namespace OutlookCalendarSync
             
             if (outlookItems != null)
             {
-                DateTime min = DateTime.Now.AddDays(-Settings.Instance.DaysInThePast);
-                DateTime max = DateTime.Now.AddDays(+Settings.Instance.DaysInTheFuture+1);
+                DateTime min = syncDateTime.AddDays(-Settings.Instance.DaysInThePast);
+                DateTime max = syncDateTime.AddDays(+Settings.Instance.DaysInTheFuture+1);
                 string filter = "[End] >= '" + min.ToString("g") + "' AND [Start] < '" + max.ToString("g") + "'";
                 foreach(AppointmentItem ai in outlookItems.Restrict(filter))
                 {
