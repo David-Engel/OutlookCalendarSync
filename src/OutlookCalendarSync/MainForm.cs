@@ -249,10 +249,10 @@ namespace OutlookCalendarSync
                     }
                 }
 
-                DateTime SyncFinished = DateTime.Now;
-                TimeSpan Elapsed = SyncFinished - syncStarted;
-                logboxout("Sync finished at " + SyncFinished.ToString());
-                logboxout("Time needed: " + Elapsed.Minutes + " min " + Elapsed.Seconds + " s");
+                DateTime syncFinished = DateTime.Now;
+                TimeSpan elapsed = syncFinished - syncStarted;
+                logboxout("Sync finished at " + syncFinished.ToString());
+                logboxout("Time needed: " + elapsed.Minutes + " min " + elapsed.Seconds + " s");
             }
             catch (System.Exception ex)
             {
@@ -518,10 +518,10 @@ namespace OutlookCalendarSync
                 logboxout("Done.");
                 logboxout("--------------------------------------------------");
 
-                DateTime SyncFinished = DateTime.Now;
-                TimeSpan Elapsed = SyncFinished - syncStarted;
-                logboxout("Delete finished at " + SyncFinished.ToString());
-                logboxout("Time needed: " + Elapsed.Minutes + " min " + Elapsed.Seconds + " s");
+                DateTime syncFinished = DateTime.Now;
+                TimeSpan elapsed = syncFinished - syncStarted;
+                logboxout("Delete finished at " + syncFinished.ToString());
+                logboxout("Time needed: " + elapsed.Minutes + " min " + elapsed.Seconds + " s");
             }
             catch (System.Exception ex)
             {
