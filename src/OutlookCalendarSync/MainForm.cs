@@ -42,8 +42,8 @@ namespace OutlookCalendarSync
             }
 
             //update GUI from Settings
-            numericUpDownDaysInThePast.Text = Settings.Instance.DaysInThePast.ToString();
-            numericUpDownDaysInTheFuture.Text = Settings.Instance.DaysInTheFuture.ToString();
+            numericUpDownDaysInThePast.Value = Settings.Instance.DaysInThePast;
+            numericUpDownDaysInTheFuture.Value = Settings.Instance.DaysInTheFuture;
             textBoxMinuteOffsets.Text = Settings.Instance.MinuteOffsets;
             OutlookHelper oh = new OutlookHelper();
             checkedListBoxCalendars.Items.Clear();
@@ -346,7 +346,7 @@ namespace OutlookCalendarSync
             return (ai.IsSyncItem && accountName.Equals(ai.FromAccount));
         }
 
-        void logboxout(string s)
+        private void logboxout(string s)
         {
             _syncWorker.ReportProgress(0, s);
         }
@@ -374,12 +374,12 @@ namespace OutlookCalendarSync
 
         void numericUpDownDaysInThePast_ValueChanged(object sender, EventArgs e)
         {
-            Settings.Instance.DaysInThePast = int.Parse(numericUpDownDaysInThePast.Text);
+            Settings.Instance.DaysInThePast = (int)numericUpDownDaysInThePast.Value;
         }
 
         void numericUpDownDaysInTheFuture_ValueChanged(object sender, EventArgs e)
         {
-            Settings.Instance.DaysInTheFuture = int.Parse(numericUpDownDaysInTheFuture.Text);
+            Settings.Instance.DaysInTheFuture = (int)numericUpDownDaysInTheFuture.Value;
         }
 
         void textBoxMinuteOffsets_TextChanged(object sender, EventArgs e)
