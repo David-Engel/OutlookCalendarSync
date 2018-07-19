@@ -60,21 +60,12 @@ namespace OutlookCalendarSync
                     }
                 }
             }
+
             checkBoxSyncEveryHour.Checked = Settings.Instance.SyncEveryHour;
             checkBoxShowBubbleTooltips.Checked = Settings.Instance.ShowBubbleTooltipWhenSyncing;
             checkBoxStartInTray.Checked = Settings.Instance.StartInTray;
             checkBoxMinimizeToTray.Checked = Settings.Instance.MinimizeToTray;
             checkBoxCreateFiles.Checked = Settings.Instance.CreateTextFiles;
-
-            //Start in tray?
-            if (checkBoxStartInTray.Checked)
-            {
-                WindowState = FormWindowState.Minimized;
-            }
-            else
-            {
-                ShowInTaskbar = true;
-            }
 
             //set up timer (every 30s) for checking the minute offsets
             _ogstimer = new Timer();
@@ -88,6 +79,15 @@ namespace OutlookCalendarSync
             _syncWorker.DoWork += syncWorker_DoWork;
             _syncWorker.ProgressChanged += syncWorker_ProgressChanged;
             _syncWorker.RunWorkerCompleted += syncWorker_RunWorkerCompleted;
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            //Start in tray?
+            if (checkBoxStartInTray.Checked)
+            {
+                WindowState = FormWindowState.Minimized;
+            }
         }
 
         void ogstimer_Tick(object sender, EventArgs e)
