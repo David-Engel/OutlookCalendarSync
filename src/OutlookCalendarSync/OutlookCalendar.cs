@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using Microsoft.Office.Interop.Outlook;
 
@@ -65,6 +66,8 @@ namespace OutlookCalendarSync
                 {
                     result.Add(ai);
                 }
+
+                Marshal.ReleaseComObject(outlookItems);
             }
             _appointments = result;
             return _appointments;

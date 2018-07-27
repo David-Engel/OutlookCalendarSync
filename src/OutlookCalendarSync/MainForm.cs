@@ -266,14 +266,14 @@ namespace OutlookCalendarSync
         {
             try
             {
-                _aiCache.Clear();
+                _aiCache.ClearAndReleaseAll();
                 if (oh != null && oh.CalendarFolders != null)
                 {
                     foreach (OutlookCalendar oc in oh.CalendarFolders)
                     {
                         if (oc != null && oc.Folder != null)
                         {
-                            Marshal.ReleaseComObject(oc.Folder);
+                            Marshal.FinalReleaseComObject(oc.Folder);
                         }
                     }
                 }

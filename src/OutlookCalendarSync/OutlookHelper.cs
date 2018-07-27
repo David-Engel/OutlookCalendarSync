@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 //using Outlook = Microsoft.Office.Interop.Outlook;
 using Microsoft.Office.Interop.Outlook;
 
@@ -36,7 +37,8 @@ namespace OutlookCalendarSync
             //Log on by using a dialog box to choose the profile.
             oNS.Logon("","", true, true);
 
-            _accountName = oNS.DefaultStore.DisplayName;
+            Store store = oNS.DefaultStore;
+            _accountName = store.DisplayName;
             foreach (Folder mailbox in oNS.Folders)
             {
                 foreach (Folder folder in mailbox.Folders)
@@ -46,11 +48,19 @@ namespace OutlookCalendarSync
                     {
                         CalendarFolders.Add(new OutlookCalendar(mailbox.Name + " - " + folder.Name, (MAPIFolder)folder));
                     }
+                    else
+                    {
+                        Marshal.ReleaseComObject(folder);
+                    }
                 }
+
+                Marshal.ReleaseComObject(mailbox);
             }
 
             // Done. Log off.
             oNS.Logoff();
+            Marshal.ReleaseComObject(oApp);
+            Marshal.ReleaseComObject(oNS);
         }
     }
 }

@@ -22,11 +22,11 @@ namespace OutlookCalendarSync
             return _cache[appointmentItem];
         }
 
-        public void Clear()
+        public void ClearAndReleaseAll()
         {
             foreach (AppointmentItem ai in _cache.Keys)
             {
-                Marshal.ReleaseComObject(ai);
+                Marshal.FinalReleaseComObject(ai);
             }
 
             _cache.Clear();
