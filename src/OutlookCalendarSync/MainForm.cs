@@ -224,12 +224,6 @@ namespace OutlookCalendarSync
                                 newAi.RequiredAttendees = ai.RequiredAttendees;
                                 newAi.OptionalAttendees = ai.OptionalAttendees;
                                 newAi.RTFBody = ai.RTFBody;
-                                newAi.Body = ai.Body;
-                                newAi.Body += Environment.NewLine;
-                                newAi.Body += Environment.NewLine + "==============================================";
-                                newAi.Body += Environment.NewLine + "Added by OutlookCalendarSync (" + calendarFrom.Name + "):" + Environment.NewLine;
-                                newAi.Body += Environment.NewLine + "ORGANIZER: " + Environment.NewLine + ai.Organizer + Environment.NewLine;
-                                newAi.Body += Environment.NewLine + "==============================================";
 
                                 if (checkBoxAddReminders.Checked && ai.ReminderSet)
                                 {
