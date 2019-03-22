@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
 //using Outlook = Microsoft.Office.Interop.Outlook;
 using Microsoft.Office.Interop.Outlook;
 
@@ -11,7 +12,6 @@ namespace OutlookCalendarSync
     /// </summary>
     public class OutlookHelper
     {
-        //private static OutlookHelper instance;
         private List<OutlookCalendar> _calendarFolders = new List<OutlookCalendar>();
 
         private string _accountName = string.Empty;
@@ -32,10 +32,10 @@ namespace OutlookCalendarSync
             Application oApp = new Application();
 
             // Get the NameSpace and Logon information.
-            NameSpace oNS = oApp.GetNamespace("mapi");
-
-            //Log on by using a dialog box to choose the profile.
-            oNS.Logon("","", true, true);
+            NameSpace oNS = (NameSpace)RetryInteropAction(new Func<NameSpace>(() =>
+            {
+                return oApp.GetNamespace("mapi");
+            }));
 
             Store store = oNS.DefaultStore;
             _accountName = store.DisplayName;
@@ -50,17 +50,42 @@ namespace OutlookCalendarSync
                     }
                     else
                     {
-                        Marshal.ReleaseComObject(folder);
+                        Marshal.FinalReleaseComObject(folder);
                     }
                 }
 
-                Marshal.ReleaseComObject(mailbox);
+                Marshal.FinalReleaseComObject(mailbox);
             }
 
-            // Done. Log off.
-            oNS.Logoff();
-            Marshal.ReleaseComObject(oApp);
-            Marshal.ReleaseComObject(oNS);
+            Marshal.FinalReleaseComObject(oApp);
+            Marshal.FinalReleaseComObject(oNS);
+            oApp = null;
+            oNS = null;
+        }
+
+        private object RetryInteropAction(Func<object> action)
+        {
+            int count = 0;
+            while (count < 5)
+            {
+                try
+                {
+                    count++;
+                    return action();
+                }
+                catch (COMException)
+                {
+                    if (count < 5)
+                    {
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+
+                    throw;
+                }
+            }
+
+            return null;
         }
     }
 }

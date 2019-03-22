@@ -45,13 +45,24 @@ namespace OutlookCalendarSync
             numericUpDownDaysInThePast.Value = Settings.Instance.DaysInThePast;
             numericUpDownDaysInTheFuture.Value = Settings.Instance.DaysInTheFuture;
             textBoxMinuteOffsets.Text = Settings.Instance.MinuteOffsets;
-            OutlookHelper oh = new OutlookHelper();
+            OutlookHelper oh = null;
+
+            try
+            {
+                oh = new OutlookHelper();
+            }
+            catch (COMException)
+            {
+                //Just retry once
+                oh = new OutlookHelper();
+            }
+
             checkedListBoxCalendars.Items.Clear();
             List<OutlookCalendar> savedCalendarsToSync = new List<OutlookCalendar>();
             savedCalendarsToSync.AddRange(Settings.Instance.CalendarsToSync.ToArray());
             foreach (OutlookCalendar calendar in oh.CalendarFolders)
             {
-                int position = checkedListBoxCalendars.Items.Add(calendar);
+                int position = checkedListBoxCalendars.Items.Add(calendar.Name);
                 foreach (OutlookCalendar entry in savedCalendarsToSync)
                 {
                     if (entry.Name.Equals(calendar.Name))
@@ -60,6 +71,8 @@ namespace OutlookCalendarSync
                     }
                 }
             }
+
+            freeCOMResources(oh);
 
             checkBoxSyncEveryHour.Checked = Settings.Instance.SyncEveryHour;
             checkBoxShowBubbleTooltips.Checked = Settings.Instance.ShowBubbleTooltipWhenSyncing;
@@ -163,6 +176,7 @@ namespace OutlookCalendarSync
                 if (calendarsToSync.Count < 2)
                 {
                     MessageBox.Show("You need at least two calendars to sync on the 'Settings' tab.");
+                    freeCOMResources(oh);
                     return;
                 }
 
@@ -530,12 +544,12 @@ namespace OutlookCalendarSync
             List<OutlookCalendar> checkedItems = new List<OutlookCalendar>();
             foreach (var item in checkedListBoxCalendars.CheckedItems)
             {
-                checkedItems.Add((OutlookCalendar)item);
+                checkedItems.Add(new OutlookCalendar((string)item, null));
             }
 
             if (e.NewValue == CheckState.Checked)
             {
-                checkedItems.Add((OutlookCalendar)checkedListBoxCalendars.Items[e.Index]);
+                checkedItems.Add(new OutlookCalendar((string)checkedListBoxCalendars.Items[e.Index], null));
             }
 
             Settings.Instance.CalendarsToSync = checkedItems;
