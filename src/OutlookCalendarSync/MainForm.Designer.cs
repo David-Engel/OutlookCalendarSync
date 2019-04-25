@@ -414,7 +414,7 @@ namespace OutlookCalendarSync
             this.labelAbout.Name = "labelAbout";
             this.labelAbout.Size = new System.Drawing.Size(732, 191);
             this.labelAbout.TabIndex = 1;
-            this.labelAbout.Text = "David\'s Outlook Calendar Sync\r\n\r\nVersion {version}\r\n\r\n2018 by David Engel\r\n\r\nCred" +
+            this.labelAbout.Text = "David\'s Outlook Calendar Sync\r\n\r\nVersion {version}\r\n\r\n2019 by David Engel\r\n\r\nCred" +
     "it:\r\nOriginally OutlookGoogleSync by Zissis Siantidis";
             this.labelAbout.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
