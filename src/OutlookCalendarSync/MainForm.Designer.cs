@@ -99,7 +99,7 @@ namespace OutlookCalendarSync
             this.tabPageSync.Controls.Add(this.buttonSyncNow);
             this.tabPageSync.Location = new System.Drawing.Point(4, 22);
             this.tabPageSync.Name = "tabPageSync";
-            this.tabPageSync.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageSync.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageSync.Size = new System.Drawing.Size(511, 503);
             this.tabPageSync.TabIndex = 0;
             this.tabPageSync.Text = "Sync";
@@ -153,7 +153,7 @@ namespace OutlookCalendarSync
             this.tabPageSettings.Controls.Add(this.groupBoxSyncDateRange);
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
-            this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageSettings.Size = new System.Drawing.Size(511, 503);
             this.tabPageSettings.TabIndex = 1;
             this.tabPageSettings.Text = "Settings";
@@ -166,9 +166,9 @@ namespace OutlookCalendarSync
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxCalendars.Controls.Add(this.checkedListBoxCalendars);
             this.groupBoxCalendars.Location = new System.Drawing.Point(6, 6);
-            this.groupBoxCalendars.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBoxCalendars.Margin = new System.Windows.Forms.Padding(2);
             this.groupBoxCalendars.Name = "groupBoxCalendars";
-            this.groupBoxCalendars.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBoxCalendars.Padding = new System.Windows.Forms.Padding(2);
             this.groupBoxCalendars.Size = new System.Drawing.Size(482, 135);
             this.groupBoxCalendars.TabIndex = 0;
             this.groupBoxCalendars.TabStop = false;
@@ -179,7 +179,7 @@ namespace OutlookCalendarSync
             this.checkedListBoxCalendars.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkedListBoxCalendars.FormattingEnabled = true;
             this.checkedListBoxCalendars.Location = new System.Drawing.Point(2, 15);
-            this.checkedListBoxCalendars.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkedListBoxCalendars.Margin = new System.Windows.Forms.Padding(2);
             this.checkedListBoxCalendars.Name = "checkedListBoxCalendars";
             this.checkedListBoxCalendars.Size = new System.Drawing.Size(478, 118);
             this.checkedListBoxCalendars.TabIndex = 0;
@@ -361,7 +361,7 @@ namespace OutlookCalendarSync
             this.tabPageAbout.Controls.Add(this.labelAbout);
             this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
             this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageAbout.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageAbout.Size = new System.Drawing.Size(511, 503);
             this.tabPageAbout.TabIndex = 2;
             this.tabPageAbout.Text = "About";
@@ -388,7 +388,7 @@ namespace OutlookCalendarSync
             this.labelAbout.Name = "labelAbout";
             this.labelAbout.Size = new System.Drawing.Size(488, 124);
             this.labelAbout.TabIndex = 1;
-            this.labelAbout.Text = "David\'s Outlook Calendar Sync\r\n\r\nVersion {version}\r\n\r\n2019 by David Engel\r\n\r\nCred" +
+            this.labelAbout.Text = "David\'s Outlook Calendar Sync\r\n\r\nVersion {version}\r\n\r\n2022 by David Engel\r\n\r\nCred" +
     "it:\r\nOriginally OutlookGoogleSync by Zissis Siantidis";
             this.labelAbout.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
