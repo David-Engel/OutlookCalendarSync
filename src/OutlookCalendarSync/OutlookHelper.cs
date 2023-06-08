@@ -1,69 +1,126 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Outlook;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
-//using Outlook = Microsoft.Office.Interop.Outlook;
-using Microsoft.Office.Interop.Outlook;
 
 namespace OutlookCalendarSync
 {
-    /// <summary>
-    /// Description of OutlookCalendar.
-    /// </summary>
-    public class OutlookHelper
+    public static class OutlookHelper
     {
-        private List<OutlookCalendar> _calendarFolders = new List<OutlookCalendar>();
-
-        private string _accountName = string.Empty;
-
-        public List<OutlookCalendar> CalendarFolders
+        public static List<OutlookCalendar> GetCalendars()
         {
-            get { return _calendarFolders; }
-        }
+            List<OutlookCalendar> calendars = new List<OutlookCalendar>();
 
-        public string AccountName
-        {
-            get { return _accountName; }
-        }
-
-        public OutlookHelper()
-        {
             // Create the Outlook application.
-            Application oApp = new Application();
+            Application oApp = null;
+            NameSpace oNS = null;
 
-            // Get the NameSpace and Logon information.
-            NameSpace oNS = (NameSpace)RetryInteropAction(new Func<NameSpace>(() =>
+            try
             {
-                return oApp.GetNamespace("mapi");
-            }));
+                oApp = new Application();
 
-            Store store = oNS.DefaultStore;
-            _accountName = store.DisplayName;
-            foreach (Folder mailbox in oNS.Folders)
-            {
-                foreach (Folder folder in mailbox.Folders)
+                // Get the NameSpace and Logon information.
+                oNS = (NameSpace)RetryInteropAction(new Func<NameSpace>(() =>
                 {
-                    if (folder is MAPIFolder &&
-                        folder.DefaultItemType == OlItemType.olAppointmentItem)
+                    return oApp.GetNamespace("mapi");
+                }));
+
+                Store store = oNS.DefaultStore;
+                foreach (Folder mailbox in oNS.Folders)
+                {
+                    foreach (Folder folder in mailbox.Folders)
                     {
-                        CalendarFolders.Add(new OutlookCalendar(mailbox.Name + " - " + folder.Name, (MAPIFolder)folder));
-                    }
-                    else
-                    {
+                        if (folder is MAPIFolder &&
+                            folder.DefaultItemType == OlItemType.olAppointmentItem)
+                        {
+                            calendars.Add(new OutlookCalendar(mailbox.Name, folder.Name));
+                        }
+
                         Marshal.FinalReleaseComObject(folder);
                     }
+
+                    Marshal.FinalReleaseComObject(mailbox);
+                }
+            }
+            finally
+            {
+                if (oApp != null)
+                {
+                    Marshal.FinalReleaseComObject(oApp);
+                    oApp = null;
                 }
 
-                Marshal.FinalReleaseComObject(mailbox);
+                if (oNS != null)
+                {
+                    Marshal.FinalReleaseComObject(oNS);
+                    oNS = null;
+                }
             }
 
-            Marshal.FinalReleaseComObject(oApp);
-            Marshal.FinalReleaseComObject(oNS);
-            oApp = null;
-            oNS = null;
+            return calendars;
         }
 
-        private object RetryInteropAction(Func<object> action)
+        public static MAPIFolder GetFolder(OutlookCalendar calendar)
+        {
+            MAPIFolder returnFolder = null;
+
+            // Create the Outlook application.
+            Application oApp = null;
+            NameSpace oNS = null;
+
+            try
+            {
+                oApp = new Application();
+
+                // Get the NameSpace and Logon information.
+                oNS = (NameSpace)RetryInteropAction(new Func<NameSpace>(() =>
+                {
+                    return oApp.GetNamespace("mapi");
+                }));
+
+                Store store = oNS.DefaultStore;
+                foreach (Folder mailbox in oNS.Folders)
+                {
+                    if (mailbox.Name.Equals(calendar.MailboxName))
+                    {
+                        foreach (Folder folder in mailbox.Folders)
+                        {
+                            if (folder is MAPIFolder &&
+                                folder.DefaultItemType == OlItemType.olAppointmentItem &&
+                                folder.Name.Equals(calendar.FolderName))
+                            {
+                                returnFolder = folder;
+                            }
+                            else
+                            {
+                                Marshal.FinalReleaseComObject(folder);
+                            }
+                        }
+                    }
+
+                    Marshal.FinalReleaseComObject(mailbox);
+                }
+            }
+            finally
+            {
+                if (oApp != null)
+                {
+                    Marshal.FinalReleaseComObject(oApp);
+                    oApp = null;
+                }
+
+                if (oNS != null)
+                {
+                    Marshal.FinalReleaseComObject(oNS);
+                    oNS = null;
+                }
+            }
+
+            return returnFolder;
+        }
+
+        private static object RetryInteropAction(Func<object> action)
         {
             int count = 0;
             while (count < 5)

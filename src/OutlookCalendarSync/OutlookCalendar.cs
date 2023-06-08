@@ -1,42 +1,42 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Outlook;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Xml.Serialization;
-using Microsoft.Office.Interop.Outlook;
 
 namespace OutlookCalendarSync
 {
+    [Serializable()]
     public class OutlookCalendar
     {
-        private MAPIFolder _folder;
-        private string _name;
         private List<AppointmentItem> _appointments;
 
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
+        public string MailboxName;
 
-        [XmlIgnore]
-        public MAPIFolder Folder
+        public string FolderName;
+
+        public MAPIFolder GetFolder()
         {
-            get { return _folder; }
+            return OutlookHelper.GetFolder(this);
         }
 
         public OutlookCalendar()
         {
         }
 
-        public OutlookCalendar(string name, MAPIFolder folder)
+        public OutlookCalendar(string mailboxName, string folderName)
         {
-            _folder = folder;
-            _name = name;
+            FolderName = folderName;
+            MailboxName = mailboxName;
         }
 
         public override string ToString()
         {
-            return _name;
+            return MailboxName + " - " + FolderName;
+        }
+
+        public void ClearCache()
+        {
+            _appointments = null;
         }
 
         public List<AppointmentItem> GetAppointmentItemsInRange(DateTime syncDateTime)
@@ -48,29 +48,51 @@ namespace OutlookCalendarSync
 
             List<AppointmentItem> result = new List<AppointmentItem>();
             
-            if (_folder == null)
+            if (FolderName == null || MailboxName == null)
             {
                 return result;
             }
 
-            Items outlookItems = _folder.Items;
-            outlookItems.Sort("[Start]",Type.Missing);
-            outlookItems.IncludeRecurrences = true;
-            
-            if (outlookItems != null)
+            MAPIFolder folder = GetFolder();
+            if (folder == null)
             {
-                DateTime min = syncDateTime.AddDays(-Settings.Instance.DaysInThePast);
-                DateTime max = syncDateTime.AddDays(+Settings.Instance.DaysInTheFuture+1);
-                string filter = "[End] >= '" + min.ToString("g") + "' AND [Start] < '" + max.ToString("g") + "'";
-                foreach(AppointmentItem ai in outlookItems.Restrict(filter))
-                {
-                    result.Add(ai);
-                }
-
-                Marshal.ReleaseComObject(outlookItems);
+                return result;
             }
+
+            try
+            {
+                Items outlookItems = folder.Items;
+                outlookItems.Sort("[Start]", Type.Missing);
+                outlookItems.IncludeRecurrences = true;
+
+                if (outlookItems != null)
+                {
+                    try
+                    {
+                        DateTime min = syncDateTime.AddDays(-Settings.Instance.DaysInThePast);
+                        DateTime max = syncDateTime.AddDays(+Settings.Instance.DaysInTheFuture + 1);
+                        string filter = "[End] >= '" + min.ToString("g") + "' AND [Start] < '" + max.ToString("g") + "'";
+                        foreach (AppointmentItem ai in outlookItems.Restrict(filter))
+                        {
+                            result.Add(ai);
+                        }
+                    }
+                    finally
+                    {
+                        Marshal.ReleaseComObject(outlookItems);
+                    }
+                }
+            }
+            finally
+            {
+                if (folder != null)
+                {
+                    Marshal.ReleaseComObject(folder);
+                }
+            }
+
             _appointments = result;
-            return _appointments;
+            return result;
         }
     }
 }

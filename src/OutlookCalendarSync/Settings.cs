@@ -1,20 +1,14 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 
 namespace OutlookCalendarSync
 {
-    /// <summary>
-    /// Description of Settings.
-    /// </summary>
     public class Settings
     {
         private static Settings _instance;
 
         public static Settings Instance
         {
-            get 
+            get
             {
                 if (_instance == null) _instance = new Settings();
                 return _instance;
@@ -23,10 +17,8 @@ namespace OutlookCalendarSync
             {
                 _instance = value;
             }
-          
         }
-        
-        
+
         public string RefreshToken = "";
         public string MinuteOffsets = "58";
         public int DaysInThePast = 14;

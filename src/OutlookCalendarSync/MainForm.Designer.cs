@@ -45,6 +45,7 @@ namespace OutlookCalendarSync
             this.buttonSyncNow = new System.Windows.Forms.Button();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.groupBoxCalendars = new System.Windows.Forms.GroupBox();
+            this.buttonLoadCalendars = new System.Windows.Forms.Button();
             this.checkedListBoxCalendars = new System.Windows.Forms.CheckedListBox();
             this.groupBoxAddReminders = new System.Windows.Forms.GroupBox();
             this.checkBoxAddReminders = new System.Windows.Forms.CheckBox();
@@ -111,7 +112,7 @@ namespace OutlookCalendarSync
             this.buttonDeleteAllSyncItems.Location = new System.Drawing.Point(348, 464);
             this.buttonDeleteAllSyncItems.Name = "buttonDeleteAllSyncItems";
             this.buttonDeleteAllSyncItems.Size = new System.Drawing.Size(155, 31);
-            this.buttonDeleteAllSyncItems.TabIndex = 2;
+            this.buttonDeleteAllSyncItems.TabIndex = 10;
             this.buttonDeleteAllSyncItems.Text = "Delete All Sync Items";
             this.toolTip1.SetToolTip(this.buttonDeleteAllSyncItems, "Delete all sync calendar items which were created by this utility on the selected" +
         " Calendars falling within the day range defined.");
@@ -130,7 +131,7 @@ namespace OutlookCalendarSync
             this.textBoxLogs.Name = "textBoxLogs";
             this.textBoxLogs.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxLogs.Size = new System.Drawing.Size(496, 452);
-            this.textBoxLogs.TabIndex = 1;
+            this.textBoxLogs.TabIndex = 0;
             // 
             // buttonSyncNow
             // 
@@ -138,7 +139,7 @@ namespace OutlookCalendarSync
             this.buttonSyncNow.Location = new System.Drawing.Point(6, 464);
             this.buttonSyncNow.Name = "buttonSyncNow";
             this.buttonSyncNow.Size = new System.Drawing.Size(98, 31);
-            this.buttonSyncNow.TabIndex = 0;
+            this.buttonSyncNow.TabIndex = 5;
             this.buttonSyncNow.Text = "Sync now";
             this.buttonSyncNow.UseVisualStyleBackColor = true;
             this.buttonSyncNow.Click += new System.EventHandler(this.SyncNow_Click);
@@ -164,6 +165,7 @@ namespace OutlookCalendarSync
             this.groupBoxCalendars.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxCalendars.Controls.Add(this.buttonLoadCalendars);
             this.groupBoxCalendars.Controls.Add(this.checkedListBoxCalendars);
             this.groupBoxCalendars.Location = new System.Drawing.Point(6, 6);
             this.groupBoxCalendars.Margin = new System.Windows.Forms.Padding(2);
@@ -174,14 +176,27 @@ namespace OutlookCalendarSync
             this.groupBoxCalendars.TabStop = false;
             this.groupBoxCalendars.Text = "Calendars to Sync";
             // 
+            // buttonLoadCalendars
+            // 
+            this.buttonLoadCalendars.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLoadCalendars.Location = new System.Drawing.Point(364, 15);
+            this.buttonLoadCalendars.Name = "buttonLoadCalendars";
+            this.buttonLoadCalendars.Size = new System.Drawing.Size(105, 43);
+            this.buttonLoadCalendars.TabIndex = 1;
+            this.buttonLoadCalendars.Text = "Load Outlook Calendars";
+            this.buttonLoadCalendars.UseVisualStyleBackColor = true;
+            this.buttonLoadCalendars.Click += new System.EventHandler(this.buttonLoadCalendars_Click);
+            // 
             // checkedListBoxCalendars
             // 
-            this.checkedListBoxCalendars.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBoxCalendars.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.checkedListBoxCalendars.FormattingEnabled = true;
             this.checkedListBoxCalendars.Location = new System.Drawing.Point(2, 15);
             this.checkedListBoxCalendars.Margin = new System.Windows.Forms.Padding(2);
             this.checkedListBoxCalendars.Name = "checkedListBoxCalendars";
-            this.checkedListBoxCalendars.Size = new System.Drawing.Size(478, 118);
+            this.checkedListBoxCalendars.Size = new System.Drawing.Size(357, 109);
             this.checkedListBoxCalendars.TabIndex = 0;
             this.checkedListBoxCalendars.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxCalendars_ItemCheck);
             // 
@@ -304,7 +319,7 @@ namespace OutlookCalendarSync
             this.buttonSave.Location = new System.Drawing.Point(6, 420);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 31);
-            this.buttonSave.TabIndex = 8;
+            this.buttonSave.TabIndex = 30;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
@@ -462,5 +477,6 @@ namespace OutlookCalendarSync
         private System.Windows.Forms.CheckedListBox checkedListBoxCalendars;
         private System.Windows.Forms.Button buttonDeleteAllSyncItems;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button buttonLoadCalendars;
     }
 }

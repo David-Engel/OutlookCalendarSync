@@ -1,8 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
-using System.Xml.Serialization;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace OutlookCalendarSync
 {
@@ -14,7 +13,7 @@ namespace OutlookCalendarSync
         public XMLManager()
         {
         }
-        
+
         /// <summary>
         /// Exports any object given in "obj" to an xml file given in "filename"
         /// </summary>
