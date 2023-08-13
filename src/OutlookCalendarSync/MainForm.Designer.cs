@@ -117,7 +117,7 @@ namespace OutlookCalendarSync
             this.toolTip1.SetToolTip(this.buttonDeleteAllSyncItems, "Delete all sync calendar items which were created by this utility on the selected" +
         " Calendars falling within the day range defined.");
             this.buttonDeleteAllSyncItems.UseVisualStyleBackColor = true;
-            this.buttonDeleteAllSyncItems.Click += new System.EventHandler(this.buttonDeleteAllSyncItems_Click);
+            this.buttonDeleteAllSyncItems.Click += new System.EventHandler(this.ButtonDeleteAllSyncItems_Click);
             // 
             // textBoxLogs
             // 
@@ -185,7 +185,7 @@ namespace OutlookCalendarSync
             this.buttonLoadCalendars.TabIndex = 1;
             this.buttonLoadCalendars.Text = "Load Outlook Calendars";
             this.buttonLoadCalendars.UseVisualStyleBackColor = true;
-            this.buttonLoadCalendars.Click += new System.EventHandler(this.buttonLoadCalendars_Click);
+            this.buttonLoadCalendars.Click += new System.EventHandler(this.ButtonLoadCalendars_Click);
             // 
             // checkedListBoxCalendars
             // 
@@ -198,7 +198,7 @@ namespace OutlookCalendarSync
             this.checkedListBoxCalendars.Name = "checkedListBoxCalendars";
             this.checkedListBoxCalendars.Size = new System.Drawing.Size(357, 109);
             this.checkedListBoxCalendars.TabIndex = 0;
-            this.checkedListBoxCalendars.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxCalendars_ItemCheck);
+            this.checkedListBoxCalendars.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxCalendars_ItemCheck);
             // 
             // groupBoxAddReminders
             // 
@@ -221,7 +221,7 @@ namespace OutlookCalendarSync
             this.checkBoxAddReminders.Text = "Add Reminders";
             this.toolTip1.SetToolTip(this.checkBoxAddReminders, "If checked, the reminder will be duplicated across calendars.");
             this.checkBoxAddReminders.UseVisualStyleBackColor = true;
-            this.checkBoxAddReminders.CheckedChanged += new System.EventHandler(this.checkBoxAddReminders_CheckedChanged);
+            this.checkBoxAddReminders.CheckedChanged += new System.EventHandler(this.CheckBoxAddReminders_CheckedChanged);
             // 
             // groupBoxOptions
             // 
@@ -245,7 +245,7 @@ namespace OutlookCalendarSync
             this.checkBoxMinimizeToTray.TabIndex = 4;
             this.checkBoxMinimizeToTray.Text = "Minimize to Tray";
             this.checkBoxMinimizeToTray.UseVisualStyleBackColor = true;
-            this.checkBoxMinimizeToTray.CheckedChanged += new System.EventHandler(this.checkBoxMinimizeToTray_CheckedChanged);
+            this.checkBoxMinimizeToTray.CheckedChanged += new System.EventHandler(this.CheckBoxMinimizeToTray_CheckedChanged);
             // 
             // checkBoxStartInTray
             // 
@@ -255,7 +255,7 @@ namespace OutlookCalendarSync
             this.checkBoxStartInTray.TabIndex = 1;
             this.checkBoxStartInTray.Text = "Start in Tray";
             this.checkBoxStartInTray.UseVisualStyleBackColor = true;
-            this.checkBoxStartInTray.CheckedChanged += new System.EventHandler(this.checkBoxStartInTray_CheckedChanged);
+            this.checkBoxStartInTray.CheckedChanged += new System.EventHandler(this.CheckBoxStartInTray_CheckedChanged);
             // 
             // checkBoxCreateFiles
             // 
@@ -267,7 +267,7 @@ namespace OutlookCalendarSync
             this.checkBoxCreateFiles.Text = "Create text files with found/identified entries";
             this.toolTip1.SetToolTip(this.checkBoxCreateFiles, resources.GetString("checkBoxCreateFiles.ToolTip"));
             this.checkBoxCreateFiles.UseVisualStyleBackColor = true;
-            this.checkBoxCreateFiles.CheckedChanged += new System.EventHandler(this.checkBoxCreateFiles_CheckedChanged);
+            this.checkBoxCreateFiles.CheckedChanged += new System.EventHandler(this.CheckBoxCreateFiles_CheckedChanged);
             // 
             // groupBoxSyncRegularly
             // 
@@ -291,7 +291,7 @@ namespace OutlookCalendarSync
             this.checkBoxShowBubbleTooltips.TabIndex = 7;
             this.checkBoxShowBubbleTooltips.Text = "Show Bubble Tooltip in Taskbar when Syncing";
             this.checkBoxShowBubbleTooltips.UseVisualStyleBackColor = true;
-            this.checkBoxShowBubbleTooltips.CheckedChanged += new System.EventHandler(this.checkBoxShowBubbleTooltips_CheckedChanged);
+            this.checkBoxShowBubbleTooltips.CheckedChanged += new System.EventHandler(this.CheckBoxShowBubbleTooltips_CheckedChanged);
             // 
             // checkBoxSyncEveryHour
             // 
@@ -301,7 +301,7 @@ namespace OutlookCalendarSync
             this.checkBoxSyncEveryHour.TabIndex = 1;
             this.checkBoxSyncEveryHour.Text = "Sync every hour at these Minute Offset(s)";
             this.checkBoxSyncEveryHour.UseVisualStyleBackColor = true;
-            this.checkBoxSyncEveryHour.CheckedChanged += new System.EventHandler(this.checkBoxSyncEveryHour_CheckedChanged);
+            this.checkBoxSyncEveryHour.CheckedChanged += new System.EventHandler(this.CheckBoxSyncEveryHour_CheckedChanged);
             // 
             // textBoxMinuteOffsets
             // 
@@ -311,7 +311,7 @@ namespace OutlookCalendarSync
             this.textBoxMinuteOffsets.TabIndex = 5;
             this.toolTip1.SetToolTip(this.textBoxMinuteOffsets, "One ore more Minute Offsets at which the sync is automatically started each hour." +
         "\r\nSeparate multiple values by commas (e.g. 5,15,25).");
-            this.textBoxMinuteOffsets.TextChanged += new System.EventHandler(this.textBoxMinuteOffsets_TextChanged);
+            this.textBoxMinuteOffsets.TextChanged += new System.EventHandler(this.TextBoxMinuteOffsets_TextChanged);
             // 
             // buttonSave
             // 
@@ -322,7 +322,7 @@ namespace OutlookCalendarSync
             this.buttonSave.TabIndex = 30;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // groupBoxSyncDateRange
             // 
@@ -344,7 +344,7 @@ namespace OutlookCalendarSync
             this.numericUpDownDaysInTheFuture.Name = "numericUpDownDaysInTheFuture";
             this.numericUpDownDaysInTheFuture.Size = new System.Drawing.Size(46, 20);
             this.numericUpDownDaysInTheFuture.TabIndex = 4;
-            this.numericUpDownDaysInTheFuture.ValueChanged += new System.EventHandler(this.numericUpDownDaysInTheFuture_ValueChanged);
+            this.numericUpDownDaysInTheFuture.ValueChanged += new System.EventHandler(this.NumericUpDownDaysInTheFuture_ValueChanged);
             // 
             // numericUpDownDaysInThePast
             // 
@@ -352,7 +352,7 @@ namespace OutlookCalendarSync
             this.numericUpDownDaysInThePast.Name = "numericUpDownDaysInThePast";
             this.numericUpDownDaysInThePast.Size = new System.Drawing.Size(46, 20);
             this.numericUpDownDaysInThePast.TabIndex = 3;
-            this.numericUpDownDaysInThePast.ValueChanged += new System.EventHandler(this.numericUpDownDaysInThePast_ValueChanged);
+            this.numericUpDownDaysInThePast.ValueChanged += new System.EventHandler(this.NumericUpDownDaysInThePast_ValueChanged);
             // 
             // labelDaysInTheFuture
             // 
@@ -393,7 +393,7 @@ namespace OutlookCalendarSync
             this.linkLabelWebsite.TabStop = true;
             this.linkLabelWebsite.Text = "http://github.com/David-Engel/OutlookCalendarSync";
             this.linkLabelWebsite.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.linkLabelWebsite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelWebsite_LinkClicked);
+            this.linkLabelWebsite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelWebsite_LinkClicked);
             // 
             // labelAbout
             // 
@@ -411,7 +411,7 @@ namespace OutlookCalendarSync
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "OutlookCalendarSync";
-            this.notifyIcon1.Click += new System.EventHandler(this.notifyIcon1_Click);
+            this.notifyIcon1.Click += new System.EventHandler(this.NotifyIcon1_Click);
             // 
             // toolTip1
             // 
