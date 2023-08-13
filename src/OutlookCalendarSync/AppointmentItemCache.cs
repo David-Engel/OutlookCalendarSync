@@ -6,7 +6,7 @@ namespace OutlookCalendarSync
 {
     class AppointmentItemCache
     {
-        private Dictionary<AppointmentItem, AppointmentItemCacheEntry> _cache = new Dictionary<AppointmentItem, AppointmentItemCacheEntry>();
+        private readonly Dictionary<AppointmentItem, AppointmentItemCacheEntry> _cache = new Dictionary<AppointmentItem, AppointmentItemCacheEntry>();
 
         public AppointmentItemCache()
         {

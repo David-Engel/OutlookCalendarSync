@@ -4,10 +4,10 @@ namespace OutlookCalendarSync
 {
     public class AppointmentItemCacheEntry
     {
-        private AppointmentItem _appointmentItem;
-        private bool _isSyncItem = false;
-        private string _fromAccount;
-        private string _signature;
+        private readonly AppointmentItem _appointmentItem;
+        private readonly bool _isSyncItem = false;
+        private readonly string _fromAccount;
+        private readonly string _signature;
 
         public AppointmentItemCacheEntry(AppointmentItem appointmentItem, string fromAccount)
         {

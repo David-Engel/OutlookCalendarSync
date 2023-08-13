@@ -18,13 +18,13 @@ namespace OutlookCalendarSync
         internal const string USER_PROPERTY_NAME = "OutlookCalendarSyncFlag";
         internal const string SUBJECT_PREFIX = "(c)";
 
-        private Timer _ogstimer;
+        private readonly Timer _ogstimer;
         private DateTime _oldtime;
-        private List<int> _minuteOffsets = new List<int>();
+        private readonly List<int> _minuteOffsets = new List<int>();
         private FormWindowState _previousWindowState = FormWindowState.Normal;
 
-        private AppointmentItemCache _aiCache = new AppointmentItemCache();
-        private BackgroundWorker _syncWorker = new BackgroundWorker();
+        private readonly AppointmentItemCache _aiCache = new AppointmentItemCache();
+        private readonly BackgroundWorker _syncWorker = new BackgroundWorker();
 
         public MainForm()
         {
@@ -60,17 +60,19 @@ namespace OutlookCalendarSync
             checkBoxCreateFiles.Checked = Settings.Instance.CreateTextFiles;
 
             //set up timer (every 30s) for checking the minute offsets
-            _ogstimer = new Timer();
-            _ogstimer.Interval = 30000;
-            _ogstimer.Tick += new EventHandler(ogstimer_Tick);
+            _ogstimer = new Timer
+            {
+                Interval = 30000
+            };
+            _ogstimer.Tick += new EventHandler(Ogstimer_Tick);
             _ogstimer.Start();
             _oldtime = DateTime.Now;
 
             _syncWorker.WorkerReportsProgress = true;
             _syncWorker.WorkerSupportsCancellation = true;
-            _syncWorker.DoWork += syncWorker_DoWork;
-            _syncWorker.ProgressChanged += syncWorker_ProgressChanged;
-            _syncWorker.RunWorkerCompleted += syncWorker_RunWorkerCompleted;
+            _syncWorker.DoWork += SyncWorker_DoWork;
+            _syncWorker.ProgressChanged += SyncWorker_ProgressChanged;
+            _syncWorker.RunWorkerCompleted += SyncWorker_RunWorkerCompleted;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -82,7 +84,7 @@ namespace OutlookCalendarSync
             }
         }
 
-        void ogstimer_Tick(object sender, EventArgs e)
+        void Ogstimer_Tick(object sender, EventArgs e)
         {
             if (!checkBoxSyncEveryHour.Checked)
                 return;
@@ -120,12 +122,12 @@ namespace OutlookCalendarSync
             _syncWorker.RunWorkerAsync();
         }
 
-        private void syncWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void SyncWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (e.Argument is string &&
-                "DELETE".Equals((string)e.Argument))
+            if (e.Argument is string arg &&
+                "DELETE".Equals(arg))
             {
-                deleteAllSyncItems();
+                DeleteAllSyncItems();
                 return;
             }
 
@@ -133,8 +135,8 @@ namespace OutlookCalendarSync
 
             try
             {
-                logboxout("Sync started at " + syncStarted.ToString());
-                logboxout("--------------------------------------------------");
+                Logboxout("Sync started at " + syncStarted.ToString());
+                Logboxout("--------------------------------------------------");
 
                 List<OutlookCalendar> calendarsToSync = Settings.Instance.CalendarsToSync;
 
@@ -146,36 +148,36 @@ namespace OutlookCalendarSync
 
                 foreach (OutlookCalendar calendarFrom in calendarsToSync)
                 {
-                    logboxout("Reading Outlook Calendar entries from Source:\r\n " + calendarFrom.ToString());
+                    Logboxout("Reading Outlook Calendar entries from Source:\r\n " + calendarFrom.ToString());
                     List<AppointmentItemCacheEntry> fromOutlookEntries = new List<AppointmentItemCacheEntry>();
                     foreach (AppointmentItem a in calendarFrom.GetAppointmentItemsInRange(syncStarted))
                     {
                         fromOutlookEntries.Add(_aiCache.GetAppointmentItemCacheEntry(a, calendarFrom.ToString()));
                     }
 
-                    logboxout("Found " + fromOutlookEntries.Count + " calendar Entries.");
+                    Logboxout("Found " + fromOutlookEntries.Count + " calendar Entries.");
 
                     foreach (OutlookCalendar calendarTo in calendarsToSync.Where(c => !c.ToString().Equals(calendarFrom.ToString())))
                     {
 
-                        logboxout("Syncing calendar from Source to Destination:\r\n " + calendarTo.ToString());
+                        Logboxout("Syncing calendar from Source to Destination:\r\n " + calendarTo.ToString());
                         List<AppointmentItemCacheEntry> toOutlookEntries = new List<AppointmentItemCacheEntry>();
                         foreach (AppointmentItem a in calendarTo.GetAppointmentItemsInRange(syncStarted))
                         {
                             toOutlookEntries.Add(_aiCache.GetAppointmentItemCacheEntry(a, calendarTo.ToString()));
                         }
 
-                        logboxout("Found " + fromOutlookEntries.Count + " Destination calendar Entries.");
+                        Logboxout("Found " + fromOutlookEntries.Count + " Destination calendar Entries.");
 
-                        List<AppointmentItem> itemsToDelete = identifyEntriesToBeDeleted(fromOutlookEntries, toOutlookEntries, calendarFrom.ToString());
-                        logboxout("Found " + itemsToDelete.Count + " sync items to delete in Destination calendar.");
+                        List<AppointmentItem> itemsToDelete = IdentifyEntriesToBeDeleted(fromOutlookEntries, toOutlookEntries, calendarFrom.ToString());
+                        Logboxout("Found " + itemsToDelete.Count + " sync items to delete in Destination calendar.");
 
-                        List<AppointmentItem> itemsToCreate = identifyEntriesToBeCreated(fromOutlookEntries, toOutlookEntries);
-                        logboxout("Found " + itemsToCreate.Count + " items to create in Destination calendar.");
+                        List<AppointmentItem> itemsToCreate = IdentifyEntriesToBeCreated(fromOutlookEntries, toOutlookEntries);
+                        Logboxout("Found " + itemsToCreate.Count + " items to create in Destination calendar.");
 
                         if (itemsToDelete.Count > 0)
                         {
-                            logboxout("Deleting " + itemsToDelete.Count + " sync items from Destination calendar...");
+                            Logboxout("Deleting " + itemsToDelete.Count + " sync items from Destination calendar...");
                             foreach (AppointmentItem ai in itemsToDelete)
                             {
                                 ai.Delete();
@@ -184,7 +186,7 @@ namespace OutlookCalendarSync
 
                         if (itemsToCreate.Count > 0)
                         {
-                            logboxout("Creating " + itemsToCreate.Count + " items in Destination calendar...");
+                            Logboxout("Creating " + itemsToCreate.Count + " items in Destination calendar...");
                             MAPIFolder folderTo = null;
                             try
                             {
@@ -229,8 +231,8 @@ namespace OutlookCalendarSync
                                 }
                             }
                         }
-                        logboxout("Done.");
-                        logboxout("--------------------------------------------------");
+                        Logboxout("Done.");
+                        Logboxout("--------------------------------------------------");
                     }
                 }
 
@@ -241,18 +243,18 @@ namespace OutlookCalendarSync
 
                 DateTime syncFinished = DateTime.Now;
                 TimeSpan elapsed = syncFinished - syncStarted;
-                logboxout("Sync finished at " + syncFinished.ToString());
-                logboxout("Time needed: " + elapsed.Minutes + " min " + elapsed.Seconds + " s");
+                Logboxout("Sync finished at " + syncFinished.ToString());
+                Logboxout("Time needed: " + elapsed.Minutes + " min " + elapsed.Seconds + " s");
             }
             catch (System.Exception ex)
             {
-                logboxout("Error Syncing:\r\n" + ex.ToString());
+                Logboxout("Error Syncing:\r\n" + ex.ToString());
             }
 
-            freeCOMResources();
+            FreeCOMResources();
         }
 
-        private void freeCOMResources()
+        private void FreeCOMResources()
         {
             try
             {
@@ -263,20 +265,20 @@ namespace OutlookCalendarSync
             }
             catch (System.Exception ex)
             {
-                logboxout("Warning: Error freeing COM resources:\r\n" + ex.ToString());
+                Logboxout("Warning: Error freeing COM resources:\r\n" + ex.ToString());
             }
         }
 
-        private void syncWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void SyncWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             buttonDeleteAllSyncItems.Enabled = true;
             buttonSyncNow.Enabled = true;
         }
 
-        public List<AppointmentItem> identifyEntriesToBeDeleted(List<AppointmentItemCacheEntry> fromItems, List<AppointmentItemCacheEntry> toItems, string fromAccountName)
+        public List<AppointmentItem> IdentifyEntriesToBeDeleted(List<AppointmentItemCacheEntry> fromItems, List<AppointmentItemCacheEntry> toItems, string fromAccountName)
         {
             List<AppointmentItem> result = new List<AppointmentItem>();
-            foreach (AppointmentItemCacheEntry toItem in toItems.Where(i => isSyncItemForAccount(i, fromAccountName)))
+            foreach (AppointmentItemCacheEntry toItem in toItems.Where(i => IsSyncItemForAccount(i, fromAccountName)))
             {
                 bool found = false;
                 foreach (AppointmentItemCacheEntry fromItem in fromItems.Where(i => !i.IsSyncItem))
@@ -297,13 +299,13 @@ namespace OutlookCalendarSync
             return result;
         }
 
-        public List<AppointmentItem> identifyEntriesToBeCreated(List<AppointmentItemCacheEntry> fromItems, List<AppointmentItemCacheEntry> toItems)
+        public List<AppointmentItem> IdentifyEntriesToBeCreated(List<AppointmentItemCacheEntry> fromItems, List<AppointmentItemCacheEntry> toItems)
         {
             List<AppointmentItem> result = new List<AppointmentItem>();
             foreach (AppointmentItemCacheEntry fromItem in fromItems.Where(i => !i.IsSyncItem))
             {
                 bool found = false;
-                foreach (AppointmentItemCacheEntry toItem in toItems.Where(i => isSyncItemForAccount(i, fromItem.FromAccount)))
+                foreach (AppointmentItemCacheEntry toItem in toItems.Where(i => IsSyncItemForAccount(i, fromItem.FromAccount)))
                 {
                     if (fromItem.Signature.Equals(toItem.Signature))
                     {
@@ -321,17 +323,17 @@ namespace OutlookCalendarSync
             return result;
         }
 
-        public bool isSyncItemForAccount(AppointmentItemCacheEntry ai, string accountName)
+        public bool IsSyncItemForAccount(AppointmentItemCacheEntry ai, string accountName)
         {
             return (ai.IsSyncItem && accountName.Equals(ai.FromAccount));
         }
 
-        private void logboxout(string s)
+        private void Logboxout(string s)
         {
             _syncWorker.ReportProgress(0, s);
         }
 
-        private void syncWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void SyncWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             string s = (string)e.UserState;
             textBoxLogs.Text += s + Environment.NewLine;
@@ -340,7 +342,7 @@ namespace OutlookCalendarSync
             textBoxLogs.ScrollToCaret();
         }
 
-        void buttonSave_Click(object sender, EventArgs e)
+        void ButtonSave_Click(object sender, EventArgs e)
         {
             try
             {
@@ -352,17 +354,17 @@ namespace OutlookCalendarSync
             }
         }
 
-        void numericUpDownDaysInThePast_ValueChanged(object sender, EventArgs e)
+        void NumericUpDownDaysInThePast_ValueChanged(object sender, EventArgs e)
         {
             Settings.Instance.DaysInThePast = (int)numericUpDownDaysInThePast.Value;
         }
 
-        void numericUpDownDaysInTheFuture_ValueChanged(object sender, EventArgs e)
+        void NumericUpDownDaysInTheFuture_ValueChanged(object sender, EventArgs e)
         {
             Settings.Instance.DaysInTheFuture = (int)numericUpDownDaysInTheFuture.Value;
         }
 
-        void textBoxMinuteOffsets_TextChanged(object sender, EventArgs e)
+        void TextBoxMinuteOffsets_TextChanged(object sender, EventArgs e)
         {
             Settings.Instance.MinuteOffsets = textBoxMinuteOffsets.Text;
 
@@ -371,44 +373,43 @@ namespace OutlookCalendarSync
             string[] chunks = textBoxMinuteOffsets.Text.Split(delimiters);
             foreach (string c in chunks)
             {
-                int min = 0;
-                int.TryParse(c, out min);
+                int.TryParse(c, out int min);
                 _minuteOffsets.Add(min);
             }
         }
 
 
-        void checkBoxSyncEveryHour_CheckedChanged(object sender, System.EventArgs e)
+        void CheckBoxSyncEveryHour_CheckedChanged(object sender, System.EventArgs e)
         {
             Settings.Instance.SyncEveryHour = checkBoxSyncEveryHour.Checked;
         }
 
-        void checkBoxShowBubbleTooltips_CheckedChanged(object sender, System.EventArgs e)
+        void CheckBoxShowBubbleTooltips_CheckedChanged(object sender, System.EventArgs e)
         {
             Settings.Instance.ShowBubbleTooltipWhenSyncing = checkBoxShowBubbleTooltips.Checked;
         }
 
-        void checkBoxStartInTray_CheckedChanged(object sender, System.EventArgs e)
+        void CheckBoxStartInTray_CheckedChanged(object sender, System.EventArgs e)
         {
             Settings.Instance.StartInTray = checkBoxStartInTray.Checked;
         }
 
-        void checkBoxMinimizeToTray_CheckedChanged(object sender, System.EventArgs e)
+        void CheckBoxMinimizeToTray_CheckedChanged(object sender, System.EventArgs e)
         {
             Settings.Instance.MinimizeToTray = checkBoxMinimizeToTray.Checked;
         }
 
-        void checkBoxAddReminders_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxAddReminders_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Instance.AddReminders = checkBoxAddReminders.Checked;
         }
 
-        void checkBoxCreateFiles_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxCreateFiles_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Instance.CreateTextFiles = checkBoxCreateFiles.Checked;
         }
 
-        void notifyIcon1_Click(object sender, EventArgs e)
+        void NotifyIcon1_Click(object sender, EventArgs e)
         {
             Show();
             WindowState = _previousWindowState;
@@ -435,12 +436,12 @@ namespace OutlookCalendarSync
             }
         }
 
-        void linkLabelWebsite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        void LinkLabelWebsite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(linkLabelWebsite.Text);
         }
 
-        private void buttonDeleteAllSyncItems_Click(object sender, EventArgs e)
+        private void ButtonDeleteAllSyncItems_Click(object sender, EventArgs e)
         {
             if (_syncWorker.IsBusy)
             {
@@ -454,14 +455,14 @@ namespace OutlookCalendarSync
             _syncWorker.RunWorkerAsync("DELETE");
         }
 
-        private void deleteAllSyncItems()
+        private void DeleteAllSyncItems()
         {
             DateTime syncStarted = DateTime.Now;
 
             try
             {
-                logboxout("Delete started at " + syncStarted.ToString());
-                logboxout("--------------------------------------------------");
+                Logboxout("Delete started at " + syncStarted.ToString());
+                Logboxout("--------------------------------------------------");
 
                 List<OutlookCalendar> calendarsToSync = Settings.Instance.CalendarsToSync;
                 List<AppointmentItem> itemsToDelete = new List<AppointmentItem>();
@@ -474,11 +475,11 @@ namespace OutlookCalendarSync
                     }
                 }
 
-                logboxout("Found " + itemsToDelete.Count + " sync Outlook Calendar Entries to delete.");
+                Logboxout("Found " + itemsToDelete.Count + " sync Outlook Calendar Entries to delete.");
 
                 if (itemsToDelete.Count > 0)
                 {
-                    logboxout("Deleting items...");
+                    Logboxout("Deleting items...");
 
                     foreach (AppointmentItem item in itemsToDelete)
                     {
@@ -487,23 +488,23 @@ namespace OutlookCalendarSync
                     }
                 }
 
-                logboxout("Done.");
-                logboxout("--------------------------------------------------");
+                Logboxout("Done.");
+                Logboxout("--------------------------------------------------");
 
                 DateTime syncFinished = DateTime.Now;
                 TimeSpan elapsed = syncFinished - syncStarted;
-                logboxout("Delete finished at " + syncFinished.ToString());
-                logboxout("Time needed: " + elapsed.Minutes + " min " + elapsed.Seconds + " s");
+                Logboxout("Delete finished at " + syncFinished.ToString());
+                Logboxout("Time needed: " + elapsed.Minutes + " min " + elapsed.Seconds + " s");
             }
             catch (System.Exception ex)
             {
-                logboxout("Error Deleting:\r\n" + ex.ToString());
+                Logboxout("Error Deleting:\r\n" + ex.ToString());
             }
 
-            freeCOMResources();
+            FreeCOMResources();
         }
 
-        private void checkedListBoxCalendars_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void CheckedListBoxCalendars_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             List<OutlookCalendar> checkedItems = new List<OutlookCalendar>();
             foreach (var item in checkedListBoxCalendars.CheckedItems)
@@ -523,7 +524,7 @@ namespace OutlookCalendarSync
             Settings.Instance.CalendarsToSync = checkedItems;
         }
 
-        private void buttonLoadCalendars_Click(object sender, EventArgs e)
+        private void ButtonLoadCalendars_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             List<OutlookCalendar> saved = new List<OutlookCalendar>();
